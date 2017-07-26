@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.baway.dao.MessageMapper">
+   <resultMap type="message" id="mes">
+   <id column="mid" property="mid"/>
+   <result column="content" property="content"/>
+   <result column="createtime" property="createtime"/>
+   <association property="user" javaType="user">
+   <id column="uid" property="uid"/>
+    <result column="uname" property="uname"/>
+     <result column="upass" property="upass"/>
+      <result column="ugender" property="ugender"/>
+   </association>
+   </resultMap>
+	<insert id="insertMessage" parameterType="message">
+	insert into t_message(content,createtime,u_id) values(#{content},#{createtime},#{user.uid})
+	</insert>
+	<select id="selectUser" resultType="user">
+	select * from t_user
+	</select>
+	<select id="selectMessage" parameterType="String" resultMap="mes">
+	select * from t_user u,t_message m where u.uid=m.u_id
+	<if test="uid!=null and uid!=''">
+	and u_id=${uid}
+	</if> 
+	</select>
+	<delete id="deleteMessage" parameterType="string">
+	delete from t_message where mid=${value}
+	</delete>
+</mapper>				
